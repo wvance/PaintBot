@@ -90,46 +90,36 @@ Tx = [1,0,0,0;...
         0,0,0,1];
 R = Tz * m;
 
-function [R] = move01(delta,a,m)
-global a1;
-a1(3) =delta;
-
-A = [1, 0, 0, a;...
-    0, 0, 1, 0;...
-    0, -1, 0, delta;...
-    0, 0, 0, 1];
-m(3) = delta;
+function [R] = move01(theta,a,m)
+theta = (theta*pi)/180;
+A = [cos(theta),-sin(theta),0,a*cos(theta);...
+        sin(theta),cos(theta),0,a*sin(theta);...
+        0,0,1,0;...
+        0,0,0,1];
 R = A * m;
-
-%theta = (theta*pi)/180;
-%A = [cos(theta),-sin(theta),0,a*cos(theta);...
-%        sin(theta),cos(theta),0,a*sin(theta);...
-%        0,0,1,0;...
-%        0,0,0,1];
-%R = A * m;
 disp(R);
 
-function [R] = move02(delta,theta2,a1,a2,m)
-
+function [R] = move02(theta1,theta2,a1,a2,m)
+theta1 = (theta1*pi)/180;
 theta2 = (theta2*pi)/180;
-A1 = [1, 0, 0, a1;...
-    0, 0, 1, 0;...
-    0, -1, 0, delta;...
-    0, 0, 0, 1];
+A1 = [cos(theta1),-sin(theta1),0,a1*cos(theta1);...
+        sin(theta1),cos(theta1),0,a1*sin(theta1);...
+        0,0,1,0;...
+        0,0,0,1];
 A2 = [cos(theta2),-sin(theta2),0,a2*cos(theta2);...
         sin(theta2),cos(theta2),0,a2*sin(theta2);...
         0,0,1,0;...
         0,0,0,1];
 R = (A1 * A2) * m;
 
-function [R] = move03(delta,theta2,theta3,a1,a2,a3,m)
-
+function [R] = move03(theta1,theta2,theta3,a1,a2,a3,m)
+theta1 = (theta1*pi)/180;
 theta2 = (theta2*pi)/180;
 theta3 = (theta3*pi)/180;
-A1 = [1, 0, 0, a1;...
-    0, 0, 1, 0;...
-    0, -1, 0, delta;...
-    0, 0, 0, 1];
+A1 = [cos(theta1),-sin(theta1),0,a1*cos(theta1);...
+        sin(theta1),cos(theta1),0,a1*sin(theta1);...
+        0,0,1,0;...
+        0,0,0,1];
 A2 = [cos(theta2),-sin(theta2),0,a2*cos(theta2);...
         sin(theta2),cos(theta2),0,a2*sin(theta2);...
         0,0,1,0;...
@@ -147,7 +137,7 @@ function paintbot_OpeningFcn(hObject, eventdata, handles, varargin)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to paintbot (see VARARGIN)
-global delta;
+global theta1;
 global theta2;
 global theta3;
 global line1;
@@ -158,32 +148,31 @@ global a2;
 global a3;
 global a4;
 
-delta = 0;
+theta1 = 90;
 theta2 = 360-45;
 theta3 = 45;
-a1 = [0;0;0+delta;1];
-temp = move01(delta,3,a1);
+a1 = [0;0;0;1];
+temp = move01(theta1,3,a1);
 
 a2(1) = temp(1);
 a2(2) = temp(2);
 a2(3) = temp(3);
 a2(4) = 1;
-temp = move02(delta,theta2,3,2,a1);
+temp = move02(theta1,theta2,3,2,a1);
 
 a3(1) = temp(1);
 a3(2) = temp(2);
 a3(3) = temp(3);
 a3(4) = 1;
-temp = move03(delta,theta2,theta3,3,2,1.5,a1);
+temp = move03(theta1,theta2,theta3,3,2,1.5,a1);
 
 a4(1) = temp(1);
 a4(2) = temp(2);
 a4(3) = temp(3);
-a4(4) = 1;
 
-line1 = line([a1(3) a2(3)],[a1(1) a2(1)],'LineWidth',15,'Color',[1 0 0]);   %red
-line2 = line([a2(3) a3(3)],[a2(1) a3(1)],'LineWidth',15,'Color',[0 1 0]);   %green
-line3 = line([a3(3) a4(3)],[a3(1) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
+line1 = line([a1(1) a2(1)],[a1(2) a2(2)],'LineWidth',15,'Color',[1 0 0]);   %red
+line2 = line([a2(1) a3(1)],[a2(2) a3(2)],'LineWidth',15,'Color',[0 1 0]);   %green
+line3 = line([a3(1) a4(1)],[a3(2) a4(2)],'LineWidth',15,'Color',[0 0 1]);   %blue
 
 % Choose default command line output for paintbot
 handles.output = hObject;
@@ -209,7 +198,7 @@ function oneclock_Callback(hObject, eventdata, handles)
 % hObject    handle to oneclock (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global delta;
+global theta1;
 global theta2;
 global theta3;
 global line1;
@@ -220,40 +209,43 @@ global a2;
 global a3;
 global a4;
 
-delta = delta+(1/36);
+if theta1 == 360
+    theta1 = 0;
+else
+    theta1 = theta1 + 1;
+end
 
-temp = move01(delta,3,a1);
+temp = move01(theta1,3,a1);
 
 a2(1) = temp(1);
 a2(2) = temp(2);
 a2(3) = temp(3);
 a2(4) = 1;
-temp = move02(delta,theta2,3,2,a1);
+temp = move02(theta1,theta2,3,2,a1);
 
 a3(1) = temp(1);
 a3(2) = temp(2);
 a3(3) = temp(3);
 a3(4) = 1;
-temp = move03(delta,theta2,theta3,3,2,1.5,a1);
+temp = move03(theta1,theta2,theta3,3,2,1.5,a1);
 
 a4(1) = temp(1);
 a4(2) = temp(2);
 a4(3) = temp(3);
-a4(4) = 1;
 
 delete(line1);
 delete(line2);
 delete(line3);
-line1 = line([a1(3) a2(3)],[a1(1) a2(1)],'LineWidth',15,'Color',[1 0 0]);   %red
-line2 = line([a2(3) a3(3)],[a2(1) a3(1)],'LineWidth',15,'Color',[0 1 0]);   %green
-line3 = line([a3(3) a4(3)],[a3(1) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
+line1 = line([a1(1) a2(1)],[a1(2) a2(2)],'LineWidth',15,'Color',[1 0 0]);   %red
+line2 = line([a2(1) a3(1)],[a2(2) a3(2)],'LineWidth',15,'Color',[0 1 0]);   %green
+line3 = line([a3(1) a4(1)],[a3(2) a4(2)],'LineWidth',15,'Color',[0 0 1]);   %blue
 
 % --- Executes on button press in onecounter.
 function onecounter_Callback(hObject, eventdata, handles)
 % hObject    handle to onecounter (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global delta;
+global theta1;
 global theta2;
 global theta3;
 global line1;
@@ -264,40 +256,43 @@ global a2;
 global a3;
 global a4;
 
-delta = delta-(1/30);
+if theta1 == 0
+    theta1 = 360;
+else
+    theta1 = theta1 - 1;
+end
 
-temp = move01(delta,3,a1);
+temp = move01(theta1,3,a1);
 
 a2(1) = temp(1);
 a2(2) = temp(2);
 a2(3) = temp(3);
 a2(4) = 1;
-temp = move02(delta,theta2,3,2,a1);
+temp = move02(theta1,theta2,3,2,a1);
 
 a3(1) = temp(1);
 a3(2) = temp(2);
 a3(3) = temp(3);
 a3(4) = 1;
-temp = move03(delta,theta2,theta3,3,2,1.5,a1);
+temp = move03(theta1,theta2,theta3,3,2,1.5,a1);
 
 a4(1) = temp(1);
 a4(2) = temp(2);
 a4(3) = temp(3);
-a4(4) = 1;
 
 delete(line1);
 delete(line2);
 delete(line3);
-line1 = line([a1(3) a2(3)],[a1(1) a2(1)],'LineWidth',15,'Color',[1 0 0]);   %red
-line2 = line([a2(3) a3(3)],[a2(1) a3(1)],'LineWidth',15,'Color',[0 1 0]);   %green
-line3 = line([a3(3) a4(3)],[a3(1) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
+line1 = line([a1(1) a2(1)],[a1(2) a2(2)],'LineWidth',15,'Color',[1 0 0]);   %red
+line2 = line([a2(1) a3(1)],[a2(2) a3(2)],'LineWidth',15,'Color',[0 1 0]);   %green
+line3 = line([a3(1) a4(1)],[a3(2) a4(2)],'LineWidth',15,'Color',[0 0 1]);   %blue
 
 % --- Executes on button press in twoclock.
 function twoclock_Callback(hObject, eventdata, handles)
 % hObject    handle to twoclock (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global delta;
+global theta1;
 global theta2;
 global theta3;
 global line1;
@@ -314,30 +309,29 @@ else
     theta2 = theta2 + 1;
 end
 
-temp = move02(delta,theta2,3,2,a1);
+temp = move02(theta1,theta2,3,2,a1);
 
 a3(1) = temp(1);
 a3(2) = temp(2);
 a3(3) = temp(3);
 a3(4) = 1;
-temp = move03(delta,theta2,theta3,3,2,1.5,a1);
+temp = move03(theta1,theta2,theta3,3,2,1.5,a1);
 
 a4(1) = temp(1);
 a4(2) = temp(2);
 a4(3) = temp(3);
-a4(4) = 1;
 
 delete(line2);
 delete(line3);
-line2 = line([a2(3) a3(3)],[a2(1) a3(1)],'LineWidth',15,'Color',[0 1 0]);   %green
-line3 = line([a3(3) a4(3)],[a3(1) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
+line2 = line([a2(1) a3(1)],[a2(2) a3(2)],'LineWidth',15,'Color',[0 1 0]);   %green
+line3 = line([a3(1) a4(1)],[a3(2) a4(2)],'LineWidth',15,'Color',[0 0 1]);   %blue
 
 % --- Executes on button press in twocounter.
 function twocounter_Callback(hObject, eventdata, handles)
 % hObject    handle to twocounter (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global delta;
+global theta1;
 global theta2;
 global theta3;
 global line1;
@@ -354,30 +348,29 @@ else
     theta2 = theta2 - 1;
 end
 
-temp = move02(delta,theta2,3,2,a1);
+temp = move02(theta1,theta2,3,2,a1);
 
 a3(1) = temp(1);
 a3(2) = temp(2);
 a3(3) = temp(3);
 a3(4) = 1;
-temp = move03(delta,theta2,theta3,3,2,1.5,a1);
+temp = move03(theta1,theta2,theta3,3,2,1.5,a1);
 
 a4(1) = temp(1);
 a4(2) = temp(2);
 a4(3) = temp(3);
-a4(4) = 1;
 
 delete(line2);
 delete(line3);
-line2 = line([a2(3) a3(3)],[a2(1) a3(1)],'LineWidth',15,'Color',[0 1 0]);   %green
-line3 = line([a3(3) a4(3)],[a3(1) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
+line2 = line([a2(1) a3(1)],[a2(2) a3(2)],'LineWidth',15,'Color',[0 1 0]);   %green
+line3 = line([a3(1) a4(1)],[a3(2) a4(2)],'LineWidth',15,'Color',[0 0 1]);   %blue
 
 % --- Executes on button press in threeclock.
 function threeclock_Callback(hObject, eventdata, handles)
 % hObject    handle to threeclock (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global delta;
+global theta1;
 global theta2;
 global theta3;
 global line1;
@@ -394,23 +387,22 @@ else
     theta3 = theta3 + 1;
 end
 
-temp = move03(delta,theta2,theta3,3,2,1.5,a1);
+temp = move03(theta1,theta2,theta3,3,2,1.5,a1);
 
 a4(1) = temp(1);
 a4(2) = temp(2);
 a4(3) = temp(3);
-a4(4) = 1;
 
 delete(line3);
 
-line3 = line([a3(3) a4(3)],[a3(1) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
+line3 = line([a3(1) a4(1)],[a3(2) a4(2)],'LineWidth',15,'Color',[0 0 1]);   %blue
 
 % --- Executes on button press in threecounter.
 function threecounter_Callback(hObject, eventdata, handles)
 % hObject    handle to threecounter (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global delta;
+global theta1;
 global theta2;
 global theta3;
 global line1;
@@ -427,15 +419,14 @@ else
     theta3 = theta3 - 1;
 end
 
-temp = move03(delta,theta2,theta3,3,2,1.5,a1);
+temp = move03(theta1,theta2,theta3,3,2,1.5,a1);
 
 a4(1) = temp(1);
 a4(2) = temp(2);
 a4(3) = temp(3);
-a4(4) = 1;
 
 delete(line3);
-line3 = line([a3(3) a4(3)],[a3(1) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
+line3 = line([a3(1) a4(1)],[a3(2) a4(2)],'LineWidth',15,'Color',[0 0 1]);   %blue
 
 
 % --- Executes on button press in paint.
