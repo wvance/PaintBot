@@ -668,9 +668,15 @@ a3(4) = 1;
  line3 = line([a3(3) a4(3)],[a3(1) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
 %
 % Same paint functionality
+<<<<<<< HEAD
 % if toggle == 1
 %     h = rectangle('Position',[a4(3) a4(1) pw ph],'Curvature',[1 1],'FaceColor',[0 0 0]);
 % end
+=======
+%  if toggle == 1
+%      h = rectangle('Position',[a4(3) a4(1) pw ph],'Curvature',[1 1],'FaceColor',[0 0 0]);
+%  end
+>>>>>>> 17e4fc2be7847783ed0f23e0adc950ae1e1d1803
 
 
 % --- Executes on button press in YPlus.
