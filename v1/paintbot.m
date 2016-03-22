@@ -33,7 +33,7 @@ function varargout = paintbot(varargin)
 
 % Edit the above text to modify the response to help paintbot
 
-% Last Modified by GUIDE v2.5 02-Mar-2016 09:53:04
+% Last Modified by GUIDE v2.5 22-Mar-2016 16:46:06
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -241,6 +241,7 @@ function oneright_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 global toggle;
+global brush;
 global delta;
 global theta2;
 global theta3;
@@ -280,7 +281,7 @@ line2 = line([a2(3) a3(3)],[a2(1) a3(1)],'LineWidth',15,'Color',[0 1 0]);   %gre
 line3 = line([a3(3) a4(3)],[a3(1) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
 
 if toggle == 1
-    h = rectangle('Position',[a4(3) a4(1) 0.1 0.1],'Curvature',[1 1],'FaceColor',[0 0 0]);
+    h = rectangle('Position',[a4(3) a4(1) brush brush],'Curvature',[1 1],'FaceColor',[0 0 0]);
 end
 
 % --- Executes on button press in oneleft.
@@ -289,6 +290,7 @@ function oneleft_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 global toggle;
+global brush;
 global delta;
 global theta2;
 global theta3;
@@ -328,7 +330,7 @@ line2 = line([a2(3) a3(3)],[a2(1) a3(1)],'LineWidth',15,'Color',[0 1 0]);   %gre
 line3 = line([a3(3) a4(3)],[a3(1) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
 
 if toggle == 1
-    h = rectangle('Position',[a4(3) a4(1) 0.1 0.1],'Curvature',[1 1],'FaceColor',[0 0 0]);
+    h = rectangle('Position',[a4(3) a4(1) brush brush],'Curvature',[1 1],'FaceColor',[0 0 0]);
 end
 
 % --- Executes on button press in twoCounterclock.
@@ -337,6 +339,7 @@ function twoCounterclock_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 global toggle;
+global brush;
 global delta;
 global theta2;
 global theta3;
@@ -372,7 +375,7 @@ line2 = line([a2(3) a3(3)],[a2(1) a3(1)],'LineWidth',15,'Color',[0 1 0]);   %gre
 line3 = line([a3(3) a4(3)],[a3(1) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
 
 if toggle == 1
-    h = rectangle('Position',[a4(3) a4(1) 0.1 0.1],'Curvature',[1 1],'FaceColor',[0 0 0]);
+    h = rectangle('Position',[a4(3) a4(1) brush brush],'Curvature',[1 1],'FaceColor',[0 0 0]);
 end
 
 % --- Executes on button press in twoCounterclock.
@@ -381,6 +384,7 @@ function twoClockwise_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 global toggle;
+global brush;
 global delta;
 global theta2;
 global theta3;
@@ -416,7 +420,7 @@ line2 = line([a2(3) a3(3)],[a2(1) a3(1)],'LineWidth',15,'Color',[0 1 0]);   %gre
 line3 = line([a3(3) a4(3)],[a3(1) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
 
 if toggle == 1
-    h = rectangle('Position',[a4(3) a4(1) 0.1 0.1],'Curvature',[1 1],'FaceColor',[0 0 0]);
+    h = rectangle('Position',[a4(3) a4(1) brush brush],'Curvature',[1 1],'FaceColor',[0 0 0]);
 end
 
 % --- Executes on button press in threeCounter.
@@ -425,6 +429,7 @@ function threeCounter_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 global toggle;
+global brush;
 global delta;
 global theta2;
 global theta3;
@@ -452,7 +457,7 @@ delete(line3);
 line3 = line([a3(3) a4(3)],[a3(1) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
 
 if toggle == 1
-    h = rectangle('Position',[a4(3) a4(1) 0.1 0.1],'Curvature',[1 1],'FaceColor',[0 0 0]);
+    h = rectangle('Position',[a4(3) a4(1) brush brush],'Curvature',[1 1],'FaceColor',[0 0 0]);
 end
 
 % --- Executes on button press in threeCounter.
@@ -461,6 +466,7 @@ function threeClockwise_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 global toggle;
+global brush;
 global delta;
 global theta2;
 global theta3;
@@ -488,9 +494,8 @@ delete(line3);
 line3 = line([a3(3) a4(3)],[a3(1) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
 
 if toggle == 1
-    h = rectangle('Position',[a4(3) a4(1) 0.1 0.1],'Curvature',[1 1],'FaceColor',[0 0 0]);
+    h = rectangle('Position',[a4(3) a4(1) brush brush],'Curvature',[1 1],'FaceColor',[0 0 0]);
 end
-
 
 % --- Executes on button press in paint.
 function paint_Callback(hObject, eventdata, handles)
@@ -507,12 +512,12 @@ elseif button_state == get(hObject,'Min')
     toggle = false;
 end
 
-
 % --- Executes on button press in init.
 function init_Callback(hObject, eventdata, handles)
 % hObject    handle to init (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
 
 
 %NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNND
@@ -546,3 +551,27 @@ function paint_ButtonDownFcn(hObject, eventdata, handles)
 % hObject    handle to paint (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on slider movement.
+function slider2_Callback(hObject, eventdata, handles)
+% hObject    handle to slider2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global brush;
+
+brush = get(hObject,'Value')
+% Hints: get(hObject,'Value') returns position of slider
+%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+
+
+% --- Executes during object creation, after setting all properties.
+function slider2_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to slider2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: slider controls usually have a light gray background.
+if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor',[.9 .9 .9]);
+end
