@@ -615,7 +615,6 @@ global theta3;
 
 y0 = y0 + 150;
 
-
 d = sqrt(x0^2 + y0^2);
 D = (15625 - x0^2 - y0^2)/15000;
 phi = atan2d((-sqrt(1-D^2)),D);
@@ -645,6 +644,7 @@ global a3;
 global a4;
 global pw;  %paintbrush width
 global ph;  %paintbrush height
+global toggle;
 % the end effector (paintbrush) of the robot is a4(3) and a4(1), X and Y
 
 a4(3) = a4(3) + 0.5;    % arbitrary constant, adds to X
@@ -668,9 +668,9 @@ a3(4) = 1;
  line3 = line([a3(3) a4(3)],[a3(1) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
 %
 % Same paint functionality
-%  if toggle == 1
-%      h = rectangle('Position',[a4(3) a4(1) pw ph],'Curvature',[1 1],'FaceColor',[0 0 0]);
-%  end
+  if toggle == 1
+      h = rectangle('Position',[a4(3) a4(1) pw ph],'Curvature',[1 1],'FaceColor',[0 0 0]);
+  end
 
 
 % --- Executes on button press in YPlus.
@@ -690,6 +690,7 @@ global a3;
 global a4;
 global pw;  %paintbrush width
 global ph;  %paintbrush height
+global toggle;
 % the end effector (paintbrush) of the robot is a4(3) and a4(1), X and Y
 
 a4(1) = a4(1) + 0.5;    % arbitrary constant, adds to Y
@@ -727,6 +728,7 @@ global a3;
 global a4;
 global pw;  %paintbrush width
 global ph;  %paintbrush height
+global toggle;
 % the end effector (paintbrush) of the robot is a4(3) and a4(1), X and Y
 
 a4(3) = a4(3) - 0.5;    % arbitrary constant, subtracts from X
@@ -766,6 +768,7 @@ global a3;
 global a4;
 global pw;  %paintbrush width
 global ph;  %paintbrush height
+global toggle;
 % the end effector (paintbrush) of the robot is a4(3) and a4(1), X and Y
 
 a4(1) = a4(1) - 0.5;    % arbitrary constant, subtracts from Y
