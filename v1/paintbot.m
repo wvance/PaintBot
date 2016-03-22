@@ -608,6 +608,26 @@ global ph;  %paintbrush height
 pw = 0.1;   %default
 ph = 0.1;   %default
 
+% --- Computes the inverse kinematics given an end point
+function inverseKin(x0,y0)
+global theta2;
+global theta3;
+
+y0 = y0 + 150;
+
+
+d = sqrt(x0^2 + y0^2);
+D = (15625 - x0^2 - y0^2)/15000;
+phi = atan2d((-sqrt(1-D^2)),D);
+theta3 = 180-phi;
+
+beta = atan2d(y0,x0);
+alpha = atan2d(75*sin(theta3),100+75*cos(theta3));
+theta2 = beta - alpha;
+theta3 = mod(theta3,180);
+theta3
+theta2
+
 % --- Executes on button press in XPlus.
 function XPlus_Callback(hObject, eventdata, handles)
 % hObject    handle to XPlus (see GCBO)
@@ -628,21 +648,21 @@ global ph;  %paintbrush height
 % the end effector (paintbrush) of the robot is a4(3) and a4(1), X and Y
 
 a4(3) = a4(3) + 0.5;    % arbitrary constant, adds to X
-
+inverseKin(a4(3),a4(1));
 % PSEUDO
 % call function(s) to figure out the delta, theta 2 and 3, and a1 through a3 variables
 % redraw lines to new variables
 %
-% delete(line1);
-% delete(line2);
-% delete(line3);
-% line1 = line([a1(3) a2(3)],[a1(1) a2(1)],'LineWidth',15,'Color',[1 0 0]);   %red
-% line2 = line([a2(3) a3(3)],[a2(1) a3(1)],'LineWidth',15,'Color',[0 1 0]);   %green
-% line3 = line([a3(3) a4(3)],[a3(1) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
+ delete(line1);
+ delete(line2);
+ delete(line3);
+ line1 = line([a1(3) a2(3)],[a1(1) a2(1)],'LineWidth',15,'Color',[1 0 0]);   %red
+ line2 = line([a2(3) a3(3)],[a2(1) a3(1)],'LineWidth',15,'Color',[0 1 0]);   %green
+ line3 = line([a3(3) a4(3)],[a3(1) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
 %
 % Same paint functionality
-% if toggle == 1
-%     h = rectangle('Position',[a4(3) a4(1) pw ph],'Curvature',[1 1],'FaceColor',[0 0 0]);
+ if toggle == 1
+     h = rectangle('Position',[a4(3) a4(1) pw ph],'Curvature',[1 1],'FaceColor',[0 0 0]);
 % end
 
 
@@ -703,6 +723,7 @@ global ph;  %paintbrush height
 % the end effector (paintbrush) of the robot is a4(3) and a4(1), X and Y
 
 a4(3) = a4(3) - 0.5;    % arbitrary constant, subtracts from X
+inverseKin(a4(3),a4(1));
 
 % PSEUDO
 % call function(s) to figure out the delta, theta 2 and 3, and a1 through a3 variables
