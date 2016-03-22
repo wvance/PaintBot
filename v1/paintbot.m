@@ -1,13 +1,56 @@
-%**************************************************************************
+%*******************************************************************************
 % Name			: Nicholas Warner
 % Date			: 28 February 2016
 % Subject		: CSCE 452
-% Assignment	: Project 1
-% Updated		: 1 March 2016
+% Assignment	: Project 1, 2
+% Updated		: 22 March 2016
 % Description	: A 3 Link Planar Robotic Arm that Paints - Paintbot
-%**************************************************************************
+%*******************************************************************************
 
-%Modified on Sublime
+% Modified on Sublime
+
+%*******************************************************************************
+%                               Version 1
+% All initial functionality added AND modified (not simple default GUIDE code):
+% rotateRz      paintbot_OpeningFcn
+% rotateRx      oneright_Callback
+% rotateRy      oneleft_Callback
+% translateX    twoCounterclock_Callback
+% translateZ    twoClockwise_Callback
+% move01        threeCounter_Callback
+% move02        threeClockwise_Callback
+% move03        paint_Callback
+%
+%*******************************************************************************
+%                               Version 2
+% Functions added AND modified:
+% paintBrushSizeSlider_CreateFcn    YPlus_Callback
+% paintBrushSizeSlider_Callback     XMinus_Callback
+% XPlus_Callback                    YMinus_Callback
+%
+% Paintbrush size slider
+%   Global variables pw and ph added to every drawing function (clock and
+%   counter buttons) for paintbrush
+%   height and width default value of 0.1 added to ph and pw in slider button
+%   init/create function
+%   
+% WorldControl Buttons added
+%    X+, Y+, X-, Y-
+%    These buttons will change the coordinate (X, Y) of the end effector
+%
+% TO DO
+% Add functions to change variables for arm postions (delta, theta 2 and 3,
+%    a1 through a3)
+% Implement in each of the four world control buttons
+% Uncomment line code in world control buttons to redraw and paint
+%
+% RECOMMEND
+% Adding a max-reach-fence check. Should the desired reach be outside of fence,
+%   which is based on current joint positions, either slide to the general area,
+%   or forbid the movement
+%
+%*******************************************************************************
+
 
 function varargout = paintbot(varargin)
 % PAINTBOT MATLAB code for paintbot.fig
@@ -33,7 +76,7 @@ function varargout = paintbot(varargin)
 
 % Edit the above text to modify the response to help paintbot
 
-% Last Modified by GUIDE v2.5 02-Mar-2016 09:53:04
+% Last Modified by GUIDE v2.5 22-Mar-2016 09:11:23
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -188,6 +231,8 @@ global a1;
 global a2;
 global a3;
 global a4;
+global pw;  %paintbrush width
+global ph;  %paintbrush height
 
 delta = 0;
 theta2 = 360-45;
@@ -251,6 +296,8 @@ global a1;
 global a2;
 global a3;
 global a4;
+global pw;  %paintbrush width
+global ph;  %paintbrush height
 
 delta = delta + (1/36);
 
@@ -280,7 +327,7 @@ line2 = line([a2(3) a3(3)],[a2(1) a3(1)],'LineWidth',15,'Color',[0 1 0]);   %gre
 line3 = line([a3(3) a4(3)],[a3(1) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
 
 if toggle == 1
-    h = rectangle('Position',[a4(3) a4(1) 0.1 0.1],'Curvature',[1 1],'FaceColor',[0 0 0]);
+    h = rectangle('Position',[a4(3) a4(1) pw ph],'Curvature',[1 1],'FaceColor',[0 0 0]);
 end
 
 % --- Executes on button press in oneleft.
@@ -299,6 +346,8 @@ global a1;
 global a2;
 global a3;
 global a4;
+global pw;  %paintbrush width
+global ph;  %paintbrush height
 
 delta = delta - (1/36);
 
@@ -328,7 +377,7 @@ line2 = line([a2(3) a3(3)],[a2(1) a3(1)],'LineWidth',15,'Color',[0 1 0]);   %gre
 line3 = line([a3(3) a4(3)],[a3(1) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
 
 if toggle == 1
-    h = rectangle('Position',[a4(3) a4(1) 0.1 0.1],'Curvature',[1 1],'FaceColor',[0 0 0]);
+    h = rectangle('Position',[a4(3) a4(1) pw ph],'Curvature',[1 1],'FaceColor',[0 0 0]);
 end
 
 % --- Executes on button press in twoCounterclock.
@@ -347,6 +396,8 @@ global a1;
 global a2;
 global a3;
 global a4;
+global pw;  %paintbrush width
+global ph;  %paintbrush height
 
 if theta2 == 360
     theta2 = 0;
@@ -372,7 +423,7 @@ line2 = line([a2(3) a3(3)],[a2(1) a3(1)],'LineWidth',15,'Color',[0 1 0]);   %gre
 line3 = line([a3(3) a4(3)],[a3(1) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
 
 if toggle == 1
-    h = rectangle('Position',[a4(3) a4(1) 0.1 0.1],'Curvature',[1 1],'FaceColor',[0 0 0]);
+    h = rectangle('Position',[a4(3) a4(1) pw ph],'Curvature',[1 1],'FaceColor',[0 0 0]);
 end
 
 % --- Executes on button press in twoCounterclock.
@@ -391,6 +442,8 @@ global a1;
 global a2;
 global a3;
 global a4;
+global pw;  %paintbrush width
+global ph;  %paintbrush height
 
 if theta2 == 0
     theta2 = 360;
@@ -416,7 +469,7 @@ line2 = line([a2(3) a3(3)],[a2(1) a3(1)],'LineWidth',15,'Color',[0 1 0]);   %gre
 line3 = line([a3(3) a4(3)],[a3(1) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
 
 if toggle == 1
-    h = rectangle('Position',[a4(3) a4(1) 0.1 0.1],'Curvature',[1 1],'FaceColor',[0 0 0]);
+    h = rectangle('Position',[a4(3) a4(1) pw ph],'Curvature',[1 1],'FaceColor',[0 0 0]);
 end
 
 % --- Executes on button press in threeCounter.
@@ -435,6 +488,8 @@ global a1;
 global a2;
 global a3;
 global a4;
+global pw;  %paintbrush width
+global ph;  %paintbrush height
 
 if theta3 == 360
     theta3 = 0;
@@ -452,7 +507,7 @@ delete(line3);
 line3 = line([a3(3) a4(3)],[a3(1) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
 
 if toggle == 1
-    h = rectangle('Position',[a4(3) a4(1) 0.1 0.1],'Curvature',[1 1],'FaceColor',[0 0 0]);
+    h = rectangle('Position',[a4(3) a4(1) pw ph],'Curvature',[1 1],'FaceColor',[0 0 0]);
 end
 
 % --- Executes on button press in threeCounter.
@@ -471,6 +526,8 @@ global a1;
 global a2;
 global a3;
 global a4;
+global pw;  %paintbrush width
+global ph;  %paintbrush height
 
 if theta3 == 0
     theta3 = 360;
@@ -488,7 +545,7 @@ delete(line3);
 line3 = line([a3(3) a4(3)],[a3(1) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
 
 if toggle == 1
-    h = rectangle('Position',[a4(3) a4(1) 0.1 0.1],'Curvature',[1 1],'FaceColor',[0 0 0]);
+    h = rectangle('Position',[a4(3) a4(1) pw ph],'Curvature',[1 1],'FaceColor',[0 0 0]);
 end
 
 
@@ -515,6 +572,192 @@ function init_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 
+% --- If Enable == 'on', executes on mouse press in 5 pixel border.
+% --- Otherwise, executes on mouse press in 5 pixel border or over paint.
+function paint_ButtonDownFcn(hObject, eventdata, handles)
+% hObject    handle to paint (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on slider movement.
+function paintBrushSizeSlider_Callback(hObject, eventdata, handles)
+% hObject    handle to paintBrushSizeSlider (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'Value') returns position of slider
+%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+global pw;  %paintbrush width
+global ph;  %paintbrush height
+
+
+% --- Executes during object creation, after setting all properties. Only runs once.
+function paintBrushSizeSlider_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to paintBrushSizeSlider (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: slider controls usually have a light gray background.
+if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor',[.9 .9 .9]);
+end
+
+global pw;  %paintbrush width
+global ph;  %paintbrush height
+pw = 0.1;   %default
+ph = 0.1;   %default
+
+% --- Executes on button press in XPlus.
+function XPlus_Callback(hObject, eventdata, handles)
+% hObject    handle to XPlus (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global delta;
+global theta2;
+global theta3;
+global line1;
+global line2;
+global line3;
+global a1;
+global a2;
+global a3;
+global a4;
+global pw;  %paintbrush width
+global ph;  %paintbrush height
+% the end effector (paintbrush) of the robot is a4(3) and a4(1), X and Y
+
+a4(3) = a4(3) + 0.5;    % arbitrary constant, adds to X
+
+% PSEUDO
+% call function(s) to figure out the delta, theta 2 and 3, and a1 through a3 variables
+% redraw lines to new variables
+%
+% delete(line1);
+% delete(line2);
+% delete(line3);
+% line1 = line([a1(3) a2(3)],[a1(1) a2(1)],'LineWidth',15,'Color',[1 0 0]);   %red
+% line2 = line([a2(3) a3(3)],[a2(1) a3(1)],'LineWidth',15,'Color',[0 1 0]);   %green
+% line3 = line([a3(3) a4(3)],[a3(1) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
+%
+% Same paint functionality
+% if toggle == 1
+%     h = rectangle('Position',[a4(3) a4(1) pw ph],'Curvature',[1 1],'FaceColor',[0 0 0]);
+% end
+
+
+% --- Executes on button press in YPlus.
+function YPlus_Callback(hObject, eventdata, handles)
+% hObject    handle to YPlus (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global delta;
+global theta2;
+global theta3;
+global line1;
+global line2;
+global line3;
+global a1;
+global a2;
+global a3;
+global a4;
+global pw;  %paintbrush width
+global ph;  %paintbrush height
+% the end effector (paintbrush) of the robot is a4(3) and a4(1), X and Y
+
+a4(1) = a4(1) + 0.5;    % arbitrary constant, adds to Y
+
+% PSEUDO
+% call function(s) to figure out the delta, theta 2 and 3, and a1 through a3 variables
+% redraw lines to new variables
+%
+% delete(line1);
+% delete(line2);
+% delete(line3);
+% line1 = line([a1(3) a2(3)],[a1(1) a2(1)],'LineWidth',15,'Color',[1 0 0]);   %red
+% line2 = line([a2(3) a3(3)],[a2(1) a3(1)],'LineWidth',15,'Color',[0 1 0]);   %green
+% line3 = line([a3(3) a4(3)],[a3(1) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
+%
+% Same paint functionality
+% if toggle == 1
+%     h = rectangle('Position',[a4(3) a4(1) pw ph],'Curvature',[1 1],'FaceColor',[0 0 0]);
+% end
+
+% --- Executes on button press in XMinus.
+function XMinus_Callback(hObject, eventdata, handles)
+% hObject    handle to XMinus (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global delta;
+global theta2;
+global theta3;
+global line1;
+global line2;
+global line3;
+global a1;
+global a2;
+global a3;
+global a4;
+global pw;  %paintbrush width
+global ph;  %paintbrush height
+% the end effector (paintbrush) of the robot is a4(3) and a4(1), X and Y
+
+a4(3) = a4(3) - 0.5;    % arbitrary constant, subtracts from X
+
+% PSEUDO
+% call function(s) to figure out the delta, theta 2 and 3, and a1 through a3 variables
+% redraw lines to new variables
+%
+% delete(line1);
+% delete(line2);
+% delete(line3);
+% line1 = line([a1(3) a2(3)],[a1(1) a2(1)],'LineWidth',15,'Color',[1 0 0]);   %red
+% line2 = line([a2(3) a3(3)],[a2(1) a3(1)],'LineWidth',15,'Color',[0 1 0]);   %green
+% line3 = line([a3(3) a4(3)],[a3(1) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
+%
+% Same paint functionality
+% if toggle == 1
+%     h = rectangle('Position',[a4(3) a4(1) pw ph],'Curvature',[1 1],'FaceColor',[0 0 0]);
+% end
+
+
+% --- Executes on button press in YMinus.
+function YMinus_Callback(hObject, eventdata, handles)
+% hObject    handle to YMinus (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global delta;
+global theta2;
+global theta3;
+global line1;
+global line2;
+global line3;
+global a1;
+global a2;
+global a3;
+global a4;
+global pw;  %paintbrush width
+global ph;  %paintbrush height
+% the end effector (paintbrush) of the robot is a4(3) and a4(1), X and Y
+
+a4(1) = a4(1) - 0.5;    % arbitrary constant, subtracts from Y
+
+% PSEUDO
+% call function(s) to figure out the delta, theta 2 and 3, and a1 through a3 variables
+% redraw lines to new variables
+%
+% delete(line1);
+% delete(line2);
+% delete(line3);
+% line1 = line([a1(3) a2(3)],[a1(1) a2(1)],'LineWidth',15,'Color',[1 0 0]);   %red
+% line2 = line([a2(3) a3(3)],[a2(1) a3(1)],'LineWidth',15,'Color',[0 1 0]);   %green
+% line3 = line([a3(3) a4(3)],[a3(1) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
+%
+% Same paint functionality
+% if toggle == 1
+%     h = rectangle('Position',[a4(3) a4(1) pw ph],'Curvature',[1 1],'FaceColor',[0 0 0]);
+% end
+
 %NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNND
 %NNNNNNNNNNNNNNNN                                               NNNNNNNNNNNNNNNND
 %NNNNNNNNNNNNNNNN   Nicholas Warner * warnern@email.tamu.edu    NNNNNNNNNNNNNNNND
@@ -538,11 +781,3 @@ function init_Callback(hObject, eventdata, handles)
 %NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN                   NNNNNNNNNNNNNNNNNNNNNNNNNNNNNND
 %NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN                   NNNNNNNNNNNNNNNNNNNNNNNNNNNNNND
 %NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNND
-
-
-% --- If Enable == 'on', executes on mouse press in 5 pixel border.
-% --- Otherwise, executes on mouse press in 5 pixel border or over paint.
-function paint_ButtonDownFcn(hObject, eventdata, handles)
-% hObject    handle to paint (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
