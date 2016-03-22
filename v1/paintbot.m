@@ -649,6 +649,13 @@ global ph;  %paintbrush height
 
 a4(3) = a4(3) + 0.5;    % arbitrary constant, adds to X
 inverseKin(a4(3),a4(1));
+
+temp = move02(delta,theta2,3,2,a1);
+
+a3(1) = temp(1);
+a3(2) = temp(2);
+a3(3) = temp(3);
+a3(4) = 1;
 % PSEUDO
 % call function(s) to figure out the delta, theta 2 and 3, and a1 through a3 variables
 % redraw lines to new variables
@@ -661,9 +668,9 @@ inverseKin(a4(3),a4(1));
  line3 = line([a3(3) a4(3)],[a3(1) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
 %
 % Same paint functionality
- if toggle == 1
-     h = rectangle('Position',[a4(3) a4(1) pw ph],'Curvature',[1 1],'FaceColor',[0 0 0]);
- end
+% if toggle == 1
+%     h = rectangle('Position',[a4(3) a4(1) pw ph],'Curvature',[1 1],'FaceColor',[0 0 0]);
+% end
 
 
 % --- Executes on button press in YPlus.
@@ -729,12 +736,12 @@ inverseKin(a4(3),a4(1));
 % call function(s) to figure out the delta, theta 2 and 3, and a1 through a3 variables
 % redraw lines to new variables
 %
-% delete(line1);
-% delete(line2);
-% delete(line3);
-% line1 = line([a1(3) a2(3)],[a1(1) a2(1)],'LineWidth',15,'Color',[1 0 0]);   %red
-% line2 = line([a2(3) a3(3)],[a2(1) a3(1)],'LineWidth',15,'Color',[0 1 0]);   %green
-% line3 = line([a3(3) a4(3)],[a3(1) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
+ delete(line1);
+ delete(line2);
+ delete(line3);
+ line1 = line([a1(3) a2(3)],[a1(1) a2(1)],'LineWidth',15,'Color',[1 0 0]);   %red
+ line2 = line([a2(3) a3(3)],[a2(1) a3(1)],'LineWidth',15,'Color',[0 1 0]);   %green
+ line3 = line([a3(3) a4(3)],[a3(1) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
 %
 % Same paint functionality
 % if toggle == 1
