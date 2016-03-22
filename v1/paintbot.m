@@ -663,7 +663,7 @@ inverseKin(a4(3),a4(1));
 % Same paint functionality
  if toggle == 1
      h = rectangle('Position',[a4(3) a4(1) pw ph],'Curvature',[1 1],'FaceColor',[0 0 0]);
-% end
+ end
 
 
 % --- Executes on button press in YPlus.
