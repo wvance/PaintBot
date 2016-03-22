@@ -590,6 +590,8 @@ function paintBrushSizeSlider_Callback(hObject, eventdata, handles)
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
 global pw;  %paintbrush width
 global ph;  %paintbrush height
+pw = get(hObject,'Value') + .1;
+ph = get(hObject,'Value') + .1;
 
 
 % --- Executes during object creation, after setting all properties. Only runs once.
