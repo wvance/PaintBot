@@ -649,8 +649,8 @@ if test > 0
     tempx = 2*cosd(theta2) + a2(3);
     tempy = 2*sind(theta2) + 3;
 
-    R(1) = tempx;
-    R(2) = tempy;
+    R(1) = tempx
+    R(2) = tempy
 end
 % theta3 = mod(theta3,180);
 
@@ -676,7 +676,14 @@ global toggle;
 
 a4(3) = a4(3) + .1;    % arbitrary constant, adds to X
 
-a3Calc = inverseKin(a4(3), a4(1));
+a3Calc = inverseKin((a4(3)+.1), a4(1));
+
+a3
+
+a3(1) = a3Calc(2);
+a3(3) = a3Calc(1);
+
+a3
 
 delete(line1);
 delete(line2);
@@ -713,8 +720,14 @@ global toggle;
 % the end effector (paintbrush) of the robot is a4(3) and a4(1), X and Y
 
 a4(1) = a4(1) + 0.1;    % arbitrary constant, adds to Y
-a3Calc = inverseKin(a4(3),a4(1));
+a3Calc = inverseKin(a4(3),(a4(1)+.1));
 
+a3
+
+a3(1) = a3Calc(2);
+a3(3) = a3Calc(1);
+
+a3
 % PSEUDO
 % call function(s) to figure out the delta, theta 2 and 3, and a1 through a3 variables
 % redraw lines to new variables
@@ -752,8 +765,14 @@ global toggle;
 % the end effector (paintbrush) of the robot is a4(3) and a4(1), X and Y
 
 a4(3) = a4(3) - 0.1;    % arbitrary constant, subtracts from X
-a3Calc = inverseKin(a4(3),a4(1));
+a3Calc = inverseKin((a4(3)-.1),a4(1));
 
+a3
+
+a3(1) = a3Calc(2);
+a3(3) = a3Calc(1);
+
+a3
 %
 delete(line1);
 delete(line2);
@@ -789,8 +808,14 @@ global toggle;
 % the end effector (paintbrush) of the robot is a4(3) and a4(1), X and Y
 
 a4(1) = a4(1) - 0.1;    % arbitrary constant, subtracts from Y
-a3Calc = inverseKin(a4(3),a4(1));
+a3Calc = inverseKin(a4(3),(a4(1)-.1));
 
+a3
+
+a3(1) = a3Calc(2);
+a3(3) = a3Calc(1);
+
+a3
 % PSEUDO
 % call function(s) to figure out the delta, theta 2 and 3, and a1 through a3 variables
 % redraw lines to new variables
