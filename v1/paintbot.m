@@ -626,8 +626,6 @@ beta = atan2d(y0,x0);
 alpha = atan2d(75*sin(theta3),100+75*cos(theta3));
 theta2 = beta - alpha;
 theta3 = mod(theta3,180);
-theta3
-theta2
 
 % --- Executes on button press in XPlus.
 function XPlus_Callback(hObject, eventdata, handles)
@@ -649,7 +647,7 @@ global ph;  %paintbrush height
 global toggle;
 % the end effector (paintbrush) of the robot is a4(3) and a4(1), X and Y
 
-a4(3) = a4(3) + 0.5;    % arbitrary constant, adds to X
+a4(3) = a4(3) + 0.1;    % arbitrary constant, adds to X
 inverseKin(a4(3),a4(1));
 
 temp = move02(delta,theta2,3,2,a1);
@@ -695,7 +693,7 @@ global ph;  %paintbrush height
 global toggle;
 % the end effector (paintbrush) of the robot is a4(3) and a4(1), X and Y
 
-a4(1) = a4(1) + 0.5;    % arbitrary constant, adds to Y
+a4(1) = a4(1) + 0.1;    % arbitrary constant, adds to Y
 
 % PSEUDO
 % call function(s) to figure out the delta, theta 2 and 3, and a1 through a3 variables
@@ -733,7 +731,7 @@ global ph;  %paintbrush height
 global toggle;
 % the end effector (paintbrush) of the robot is a4(3) and a4(1), X and Y
 
-a4(3) = a4(3) - 0.5;    % arbitrary constant, subtracts from X
+a4(3) = a4(3) - 0.1;    % arbitrary constant, subtracts from X
 inverseKin(a4(3),a4(1));
 
 % PSEUDO
@@ -773,7 +771,8 @@ global ph;  %paintbrush height
 global toggle;
 % the end effector (paintbrush) of the robot is a4(3) and a4(1), X and Y
 
-a4(1) = a4(1) - 0.5;    % arbitrary constant, subtracts from Y
+a4(1) = a4(1) - 0.1;    % arbitrary constant, subtracts from Y
+inverseKin(a4(3),a4(1));
 
 % PSEUDO
 % call function(s) to figure out the delta, theta 2 and 3, and a1 through a3 variables
