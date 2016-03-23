@@ -631,24 +631,27 @@ y0 = y0 - 3;
 
 D = (x0^2 + y0^2 - 1.5^2 - 2^2)/(2*2*1.5);
 % D = (6.25 - x0^2 - y0^2)/16;
-theta3 = atan2d((sqrt(1-D^2)),D);
+test = sqrt(1-D^2)
+if test > 0
+    theta3 = atan2d((sqrt(1-D^2)),D);
 
-% phi = atan2d((sqrt(1-D^2)),D);
-% phi
-% theta3 = 180-phi;
+    % phi = atan2d((sqrt(1-D^2)),D);
+    % phi
+    % theta3 = 180-phi;
 
-abeta = atan2d(y0,x0);
-alpha = atan2d(1.5*sind(theta3),2+1.5*cosd(theta3));
+    abeta = atan2d(y0,x0);
+    alpha = atan2d(1.5*sind(theta3),2+1.5*cosd(theta3));
 
-theta2 = abeta - alpha;
+    theta2 = abeta - alpha;
 
-%theta2
-%theta3
-tempx = 2*cosd(theta2);
-tempy = 2*sind(theta2) + 3;
+    %theta2
+    %theta3
+    tempx = 2*cosd(theta2);
+    tempy = 2*sind(theta2) + 3;
 
-R(1) = tempx;
-R(2) = tempy;
+    R(1) = tempx;
+    R(2) = tempy;
+end
 % theta3 = mod(theta3,180);
 
 % --- Executes on button press in XPlus.
