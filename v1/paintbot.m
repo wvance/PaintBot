@@ -236,26 +236,17 @@ global ph;  %paintbrush height
 
 delta = 0;
 % view = [az,el]
-a4(3) = .5142
-a4(1) = 5.9142
+a4(3) = .5142;
+a4(1) = 5.9142;
 
-test = inverseKin(a4(3), a4(1))
+a3Calc = inverseKin(a4(3), a4(1));
 
-a4(3)
-a4(1)
-theta2
-theta3
-test(1)
-test(2)
-% tempx = 2*cos(theta2)
-% tempy = 2*sin(theta2) +3
-% tempx
-% tempy
-
-% theta2 = 360-45;
-% theta3 = 45;
-
-
+% a4(3)
+% a4(1)
+% theta2
+% theta3
+% a3Calc(1)
+% a3Calc(2)
 
 a1 = [0;0;0+delta;1];
 temp = move01(delta,3,a1);
@@ -634,26 +625,27 @@ ph = 0.1;   %default
 function [R] = inverseKin(x0,y0)
 global theta2;
 global theta3;
+global a2;
 
 y0 = y0 - 3;
 
-D = (x0^2 + y0^2 - 1.5^2 - 2^2)/(2*2*1.5)
+D = (x0^2 + y0^2 - 1.5^2 - 2^2)/(2*2*1.5);
 % D = (6.25 - x0^2 - y0^2)/16;
-theta3 = atan2d((sqrt(1-D^2)),D)
+theta3 = atan2d((sqrt(1-D^2)),D);
 
 % phi = atan2d((sqrt(1-D^2)),D);
 % phi
 % theta3 = 180-phi;
 
 abeta = atan2d(y0,x0);
-alpha = atan2d(1.5*sin(theta3),2+1.5*cos(theta3));
+alpha = atan2d(1.5*sind(theta3),2+1.5*cosd(theta3));
 
 theta2 = abeta - alpha;
 
-theta2
-theta3
-tempx = 2*cos(theta2)
-tempy = 2*sin(theta2) +3
+%theta2
+%theta3
+tempx = 2*cosd(theta2);
+tempy = 2*sind(theta2) + 3;
 
 R(1) = tempx;
 R(2) = tempy;
@@ -681,25 +673,15 @@ global toggle;
 
 a4(3) = a4(3) + .1;    % arbitrary constant, adds to X
 
-inverseKin(a4(3),a4(1));
+a3Calc = inverseKin(a4(3), a4(1));
 
-temp = move03(delta,theta2,theta3,3,2,1.5,a1);
+delete(line1);
+delete(line2);
+delete(line3);
 
-a3(1) = temp(1);
-a3(2) = temp(2);
-a3(3) = temp(3);
-a3(4) = 1;
-
-% PSEUDO
-% call function(s) to figure out the delta, theta 2 and 3, and a1 through a3 variables
-% redraw lines to new variables
-%
- delete(line1);
- delete(line2);
- delete(line3);
- line1 = line([a1(3) a2(3)],[a1(1) a2(1)],'LineWidth',15,'Color',[1 0 0]);   %red
- line2 = line([a2(3) a3(3)],[a2(1) a3(1)],'LineWidth',15,'Color',[0 1 0]);   %green
- line3 = line([a3(3) a4(3)],[a3(1) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
+line1 = line([a1(3) a2(3)],[a1(1) a2(1)],'LineWidth',15,'Color',[1 0 0]);   %red
+line2 = line([a2(3) a3Calc(1)],[a2(1) a3Calc(2)],'LineWidth',15,'Color',[0 1 0]);   %green
+line3 = line([a3Calc(1) a4(3)],[a3Calc(2) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
 %
 % Same paint functionality
   if toggle == 1
@@ -728,17 +710,18 @@ global toggle;
 % the end effector (paintbrush) of the robot is a4(3) and a4(1), X and Y
 
 a4(1) = a4(1) + 0.1;    % arbitrary constant, adds to Y
+a3Calc = inverseKin(a4(3),a4(1));
 
 % PSEUDO
 % call function(s) to figure out the delta, theta 2 and 3, and a1 through a3 variables
 % redraw lines to new variables
 %
- delete(line1);
- delete(line2);
- delete(line3);
- line1 = line([a1(3) a2(3)],[a1(1) a2(1)],'LineWidth',15,'Color',[1 0 0]);   %red
- line2 = line([a2(3) a3(3)],[a2(1) a3(1)],'LineWidth',15,'Color',[0 1 0]);   %green
- line3 = line([a3(3) a4(3)],[a3(1) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
+delete(line1);
+delete(line2);
+delete(line3);
+line1 = line([a1(3) a2(3)],[a1(1) a2(1)],'LineWidth',15,'Color',[1 0 0]);   %red
+line2 = line([a2(3) a3Calc(1)],[a2(1) a3Calc(2)],'LineWidth',15,'Color',[0 1 0]);   %green
+line3 = line([a3Calc(1) a4(3)],[a3Calc(2) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
 %
 % Same paint functionality
  if toggle == 1
@@ -766,19 +749,15 @@ global toggle;
 % the end effector (paintbrush) of the robot is a4(3) and a4(1), X and Y
 
 a4(3) = a4(3) - 0.1;    % arbitrary constant, subtracts from X
-test = inverseKin(a4(3),a4(1));
-test(1)
-test(2)
-% PSEUDO
-% call function(s) to figure out the delta, theta 2 and 3, and a1 through a3 variables
-% redraw lines to new variables
+a3Calc = inverseKin(a4(3),a4(1));
+
 %
- delete(line1);
- delete(line2);
- delete(line3);
- line1 = line([a1(3) a2(3)],[a1(1) a2(1)],'LineWidth',15,'Color',[1 0 0]);   %red
- line2 = line([a2(3) a3(3)],[a2(1) a3(1)],'LineWidth',15,'Color',[0 1 0]);   %green
- line3 = line([a3(3) a4(3)],[a3(1) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
+delete(line1);
+delete(line2);
+delete(line3);
+line1 = line([a1(3) a2(3)],[a1(1) a2(1)],'LineWidth',15,'Color',[1 0 0]);   %red
+line2 = line([a2(3) a3Calc(1)],[a2(1) a3Calc(2)],'LineWidth',15,'Color',[0 1 0]);   %green
+line3 = line([a3Calc(1) a4(3)],[a3Calc(2) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
 %
 % Same paint functionality
  if toggle == 1
@@ -807,18 +786,18 @@ global toggle;
 % the end effector (paintbrush) of the robot is a4(3) and a4(1), X and Y
 
 a4(1) = a4(1) - 0.1;    % arbitrary constant, subtracts from Y
-inverseKin(a4(3),a4(1));
+a3Calc = inverseKin(a4(3),a4(1));
 
 % PSEUDO
 % call function(s) to figure out the delta, theta 2 and 3, and a1 through a3 variables
 % redraw lines to new variables
 %
- delete(line1);
- delete(line2);
- delete(line3);
- line1 = line([a1(3) a2(3)],[a1(1) a2(1)],'LineWidth',15,'Color',[1 0 0]);   %red
- line2 = line([a2(3) a3(3)],[a2(1) a3(1)],'LineWidth',15,'Color',[0 1 0]);   %green
- line3 = line([a3(3) a4(3)],[a3(1) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
+delete(line1);
+delete(line2);
+delete(line3);
+line1 = line([a1(3) a2(3)],[a1(1) a2(1)],'LineWidth',15,'Color',[1 0 0]);   %red
+line2 = line([a2(3) a3Calc(1)],[a2(1) a3Calc(2)],'LineWidth',15,'Color',[0 1 0]);   %green
+line3 = line([a3Calc(1) a4(3)],[a3Calc(2) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
 %
 % Same paint functionality
  if toggle == 1
