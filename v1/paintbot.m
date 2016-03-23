@@ -33,7 +33,7 @@
 %   counter buttons) for paintbrush
 %   height and width default value of 0.1 added to ph and pw in slider button
 %   init/create function
-%   
+%
 % WorldControl Buttons added
 %    X+, Y+, X-, Y-
 %    These buttons will change the coordinate (X, Y) of the end effector
@@ -235,8 +235,28 @@ global pw;  %paintbrush width
 global ph;  %paintbrush height
 
 delta = 0;
-theta2 = 360-45;
-theta3 = 45;
+% view = [az,el]
+a4(3) = .5142
+a4(1) = 5.9142
+
+test = inverseKin(a4(3), a4(1))
+
+a4(3)
+a4(1)
+theta2
+theta3
+test(1)
+test(2)
+% tempx = 2*cos(theta2)
+% tempy = 2*sin(theta2) +3
+% tempx
+% tempy
+
+% theta2 = 360-45;
+% theta3 = 45;
+
+
+
 a1 = [0;0;0+delta;1];
 temp = move01(delta,3,a1);
 
@@ -271,7 +291,7 @@ guidata(hObject, handles);
 % uiwait(handles.figure1);
 
 % --- Outputs from this function are returned to the command line.
-function varargout = paintbot_OutputFcn(hObject, eventdata, handles) 
+function varargout = paintbot_OutputFcn(hObject, eventdata, handles)
 % varargout  cell array for returning output args (see VARARGOUT);
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -611,21 +631,33 @@ pw = 0.1;   %default
 ph = 0.1;   %default
 
 % --- Computes the inverse kinematics given an end point
-function inverseKin(x0,y0)
+function [R] = inverseKin(x0,y0)
 global theta2;
 global theta3;
 
-y0 = y0 + 150;
+y0 = y0 - 3;
 
-d = sqrt(x0^2 + y0^2);
-D = (15625 - x0^2 - y0^2)/15000;
-phi = atan2d((-sqrt(1-D^2)),D);
-theta3 = 180-phi;
+D = (x0^2 + y0^2 - 1.5^2 - 2^2)/(2*2*1.5)
+% D = (6.25 - x0^2 - y0^2)/16;
+theta3 = atan2d((sqrt(1-D^2)),D)
 
-beta = atan2d(y0,x0);
-alpha = atan2d(75*sin(theta3),100+75*cos(theta3));
-theta2 = beta - alpha;
-theta3 = mod(theta3,180);
+% phi = atan2d((sqrt(1-D^2)),D);
+% phi
+% theta3 = 180-phi;
+
+abeta = atan2d(y0,x0);
+alpha = atan2d(1.5*sin(theta3),2+1.5*cos(theta3));
+
+theta2 = abeta - alpha;
+
+theta2
+theta3
+tempx = 2*cos(theta2)
+tempy = 2*sin(theta2) +3
+
+R(1) = tempx;
+R(2) = tempy;
+% theta3 = mod(theta3,180);
 
 % --- Executes on button press in XPlus.
 function XPlus_Callback(hObject, eventdata, handles)
@@ -647,15 +679,17 @@ global ph;  %paintbrush height
 global toggle;
 % the end effector (paintbrush) of the robot is a4(3) and a4(1), X and Y
 
-a4(3) = a4(3) + 0.1;    % arbitrary constant, adds to X
+a4(3) = a4(3) + .1;    % arbitrary constant, adds to X
+
 inverseKin(a4(3),a4(1));
 
-temp = move02(delta,theta2,3,2,a1);
+temp = move03(delta,theta2,theta3,3,2,1.5,a1);
 
 a3(1) = temp(1);
 a3(2) = temp(2);
 a3(3) = temp(3);
 a3(4) = 1;
+
 % PSEUDO
 % call function(s) to figure out the delta, theta 2 and 3, and a1 through a3 variables
 % redraw lines to new variables
@@ -732,8 +766,9 @@ global toggle;
 % the end effector (paintbrush) of the robot is a4(3) and a4(1), X and Y
 
 a4(3) = a4(3) - 0.1;    % arbitrary constant, subtracts from X
-inverseKin(a4(3),a4(1));
-
+test = inverseKin(a4(3),a4(1));
+test(1)
+test(2)
 % PSEUDO
 % call function(s) to figure out the delta, theta 2 and 3, and a1 through a3 variables
 % redraw lines to new variables
@@ -813,3 +848,4 @@ inverseKin(a4(3),a4(1));
 %NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN                   NNNNNNNNNNNNNNNNNNNNNNNNNNNNNND
 %NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN                   NNNNNNNNNNNNNNNNNNNNNNNNNNNNNND
 %NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNND
+
