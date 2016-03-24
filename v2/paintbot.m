@@ -646,7 +646,7 @@ if test > 0
 
     %theta2
     %theta3
-    tempx = 2*cosd(theta2) + a2(3);
+    tempx = 2*cosd(theta2);
     tempy = 2*sind(theta2) + 3;
 
     R(1) = tempx;
