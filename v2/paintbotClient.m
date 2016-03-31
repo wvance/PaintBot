@@ -75,7 +75,7 @@ function varargout = paintbot(varargin)
 
 % Edit the above text to modify the response to help paintbot
 
-% Last Modified by GUIDE v2.5 30-Mar-2016 16:40:49
+% Last Modified by GUIDE v2.5 30-Mar-2016 17:44:27
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -805,10 +805,7 @@ line3 = line([a3Calc(1) a4(3)],[a3Calc(2) a4(1)],'LineWidth',15,'Color',[0 0 1])
      h = rectangle('Position',[a4(3) a4(1) pw ph],'Curvature',[1 1],'FaceColor',[0 0 0]);
  end
  
-function startServer(hObject, eventdata, handles)
-global delta;
-global theta2;
-global theta3;
+function receiveData(hObject, eventdata, handles)
 global line1;
 global line2;
 global line3;
@@ -820,23 +817,32 @@ global pw;  %paintbrush width
 global ph;  %paintbrush height
 global toggle;
 
-data = zeros(1,19);
-data(1) = a1(1); data(2) = a1(2); data(3) = a1(3); data(4) = a1(4);
-data(5) = a2(1); data(6) = a2(2); data(7) = a2(3); data(8) = a2(4);
-data(9) = a3(1); data(10) = a3(2); data(11) = a3(3); data(12) = a3(4);
-data(13) = a4(1); data(14) = a4(2); data(15) = a4(3); data(16) = a4(4);
-data(17) = pw; data(18) = ph;
- if toggle == 1
-     data(19) = toggle;
- end
-
-tcpipServer = tcpip('0.0.0.0', 30000, 'NetworkRole', 'server');
-set(tcpipServer,'OutputBufferSize',152);
-'Hi I am the server'
-fopen(tcpipServer);
-fwrite(tcpipServer, data(:), 'double');
-fclose(tcpipServer);
+tcpipClient = tcpip('localhost', 30000, 'NetworkRole', 'client');
+set(tcpipClient,'InputBufferSize',152);
+set(tcpipClient,'Timeout',10);
+'Hi I am the client'
+fopen(tcpipClient);
+data = fread(tcpipClient, 19, 'double');
+fclose(tcpipClient);
 data
+
+a1(1) = data(1); a1(2) = data(2); a1(3) = data(3); a1(4) = data(4);
+a2(1) = data(5); a2(2) = data(6); a2(3) = data(7); a2(4) = data(8);
+a3(1) = data(9); a3(2) = data(10); a3(3) = data(11); a3(4) = data(12);
+a4(1) = data(13); a4(2) = data(14); a4(3) = data(15); a4(4) = data(16);
+pw = data(17); ph = data(18);
+toggle = data(19);
+
+delete(line1);
+delete(line2);
+delete(line3);
+line1 = line([a1(3) a2(3)],[a1(1) a2(1)],'LineWidth',15,'Color',[1 0 0]);   %red
+line2 = line([a2(3) a3(3)],[a2(1) a3(1)],'LineWidth',15,'Color',[0 1 0]);   %green
+line3 = line([a3(3) a4(3)],[a3(1) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
+
+if toggle == 1
+    h = rectangle('Position',[a4(3) a4(1) pw ph],'Curvature',[1 1],'FaceColor',[0 0 0]);
+end
 
 %NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNND
 %NNNNNNNNNNNNNNNN                                               NNNNNNNNNNNNNNNND
