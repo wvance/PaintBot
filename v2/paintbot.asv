@@ -75,7 +75,7 @@ function varargout = paintbot(varargin)
 
 % Edit the above text to modify the response to help paintbot
 
-% Last Modified by GUIDE v2.5 30-Mar-2016 16:40:49
+% Last Modified by GUIDE v2.5 31-Mar-2016 11:43:05
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -671,10 +671,14 @@ global a4;
 global pw;  %paintbrush width
 global ph;  %paintbrush height
 global toggle;
+global toggle2;
 % the end effector (paintbrush) of the robot is a4(3) and a4(1), X and Y
 
 a4(3) = a4(3) + .1;    % arbitrary constant, adds to X
 a3Calc = inverseKin(a4(3), a4(1));
+
+a3(3) = a3Calc(1);
+a3(1) = a3Calc(2);
 
 delete(line1);
 delete(line2);
@@ -683,11 +687,15 @@ delete(line3);
 line1 = line([a1(3) a2(3)],[a1(1) a2(1)],'LineWidth',15,'Color',[1 0 0]);   %red
 line2 = line([a2(3) a3Calc(1)],[a2(1) a3Calc(2)],'LineWidth',15,'Color',[0 1 0]);   %green
 line3 = line([a3Calc(1) a4(3)],[a3Calc(2) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
-%
+
 % Same paint functionality
   if toggle == 1
       h = rectangle('Position',[a4(3) a4(1) pw ph],'Curvature',[1 1],'FaceColor',[0 0 0]);
   end
+  if toggle2 == 1
+      update_client();
+  end
+  drawnow
 
 
 % --- Executes on button press in YPlus.
@@ -708,10 +716,14 @@ global a4;
 global pw;  %paintbrush width
 global ph;  %paintbrush height
 global toggle;
+global toggle2;
 % the end effector (paintbrush) of the robot is a4(3) and a4(1), X and Y
 
 a4(1) = a4(1) + 0.1;    % arbitrary constant, adds to Y
 a3Calc = inverseKin(a4(3),a4(1));
+
+a3(3) = a3Calc(1);
+a3(1) = a3Calc(2);
 
 % PSEUDO
 % call function(s) to figure out the delta, theta 2 and 3, and a1 through a3 variables
@@ -723,11 +735,15 @@ delete(line3);
 line1 = line([a1(3) a2(3)],[a1(1) a2(1)],'LineWidth',15,'Color',[1 0 0]);   %red
 line2 = line([a2(3) a3Calc(1)],[a2(1) a3Calc(2)],'LineWidth',15,'Color',[0 1 0]);   %green
 line3 = line([a3Calc(1) a4(3)],[a3Calc(2) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
-%
+
 % Same paint functionality
  if toggle == 1
      h = rectangle('Position',[a4(3) a4(1) pw ph],'Curvature',[1 1],'FaceColor',[0 0 0]);
  end
+ if toggle2 == 1
+     update_client();
+ end
+ drawnow
  
  % --- Executes on button press in XMinus.
 function XMinus_Callback(hObject, eventdata, handles)
@@ -747,10 +763,14 @@ global a4;
 global pw;  %paintbrush width
 global ph;  %paintbrush height
 global toggle;
+global toggle2;
 % the end effector (paintbrush) of the robot is a4(3) and a4(1), X and Y
 
 a4(3) = a4(3) - 0.1;    % arbitrary constant, subtracts from X
 a3Calc = inverseKin(a4(3),a4(1));
+
+a3(3) = a3Calc(1);
+a3(1) = a3Calc(2);
 
 %
 delete(line1);
@@ -759,11 +779,15 @@ delete(line3);
 line1 = line([a1(3) a2(3)],[a1(1) a2(1)],'LineWidth',15,'Color',[1 0 0]);   %red
 line2 = line([a2(3) a3Calc(1)],[a2(1) a3Calc(2)],'LineWidth',15,'Color',[0 1 0]);   %green
 line3 = line([a3Calc(1) a4(3)],[a3Calc(2) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
-%
+
 % Same paint functionality
  if toggle == 1
      h = rectangle('Position',[a4(3) a4(1) pw ph],'Curvature',[1 1],'FaceColor',[0 0 0]);
  end
+ if toggle2 == 1
+     update_client();
+ end
+ drawnow
 
 
 % --- Executes on button press in YMinus.
@@ -784,10 +808,14 @@ global a4;
 global pw;  %paintbrush width
 global ph;  %paintbrush height
 global toggle;
+global toggle2;
 % the end effector (paintbrush) of the robot is a4(3) and a4(1), X and Y
 
 a4(1) = a4(1) - 0.1;    % arbitrary constant, subtracts from Y
 a3Calc = inverseKin(a4(3),a4(1));
+
+a3(3) = a3Calc(1);
+a3(1) = a3Calc(2);
 
 % PSEUDO
 % call function(s) to figure out the delta, theta 2 and 3, and a1 through a3 variables
@@ -799,13 +827,18 @@ delete(line3);
 line1 = line([a1(3) a2(3)],[a1(1) a2(1)],'LineWidth',15,'Color',[1 0 0]);   %red
 line2 = line([a2(3) a3Calc(1)],[a2(1) a3Calc(2)],'LineWidth',15,'Color',[0 1 0]);   %green
 line3 = line([a3Calc(1) a4(3)],[a3Calc(2) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
-%
+
 % Same paint functionality
- if toggle == 1
+if toggle == 1
      h = rectangle('Position',[a4(3) a4(1) pw ph],'Curvature',[1 1],'FaceColor',[0 0 0]);
- end
- 
-function startServer(hObject, eventdata, handles)
+end
+if toggle2 == 1
+    update_client()
+end
+drawnow
+
+
+function update_client()
 global delta;
 global theta2;
 global theta3;
@@ -819,26 +852,54 @@ global a4;
 global pw;  %paintbrush width
 global ph;  %paintbrush height
 global toggle;
+global toggle2;
+global tcpipServer;
+'Sending update'
 
-t = tcpip('0.0.0.0', 30000, 'NetworkRole', 'server');
-'Hi I am the server'
-data = zeros(1,25);
-fopen(t);
-data = fread(t, 25, t.BytesAvailable);
-fclose(t);
-data
-
-delete(line1);
-delete(line2);
-delete(line3);
-line1 = line([a1(3) a2(3)],[a1(1) a2(1)],'LineWidth',15,'Color',[1 0 0]);   %red
-line2 = line([a2(3) a3(3)],[a2(1) a3(1)],'LineWidth',15,'Color',[0 1 0]);   %green
-line3 = line([a3(3) a4(3)],[a3(1) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
-
+data = zeros(1,19);
+data(1) = a1(1); data(2) = a1(2); data(3) = a1(3); data(4) = a1(4);
+data(5) = a2(1); data(6) = a2(2); data(7) = a2(3); data(8) = a2(4);
+data(9) = a3(1); data(10) = a3(2); data(11) = a3(3); data(12) = a3(4);
+data(13) = a4(1); data(14) = a4(2); data(15) = a4(3); data(16) = a4(4);
+data(17) = pw; data(18) = ph;
 if toggle == 1
-    h = rectangle('Position',[a4(3) a4(1) pw ph],'Curvature',[1 1],'FaceColor',[0 0 0]);
+    data(19) = toggle;
 end
 
+whos data
+
+fwrite(tcpipServer, data(:), 'double');
+'Data Sent'
+
+ 
+function startServer(hObject, eventdata, handles)
+global tcpipServer;
+global toggle2;
+tcpipServer = tcpip('0.0.0.0', 30000, 'NetworkRole', 'server');
+set(tcpipServer,'OutputBufferSize',152);
+'Hi I am the server'
+toggle2 = true;
+fopen(tcpipServer);
+pause(1);
+'Connection opened'
+update_client();
+
+
+%fclose(tcpipServer);
+%data
+
+% --- Executes on button press in stop_server.
+function stop_server(hObject, eventdata, handles)
+global tcpipServer;
+global toggle2;
+
+'Hi I am the server, ending session'
+toggle2 = false;
+fclose(tcpipServer);
+'Disconnected'
+% hObject    handle to stop_server (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
 
 %NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNND
 %NNNNNNNNNNNNNNNN                                               NNNNNNNNNNNNNNNND

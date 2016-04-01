@@ -75,7 +75,7 @@ function varargout = paintbot(varargin)
 
 % Edit the above text to modify the response to help paintbot
 
-% Last Modified by GUIDE v2.5 30-Mar-2016 17:44:27
+% Last Modified by GUIDE v2.5 31-Mar-2016 11:41:59
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -671,7 +671,12 @@ global a4;
 global pw;  %paintbrush width
 global ph;  %paintbrush height
 global toggle;
+global toggle2;
 % the end effector (paintbrush) of the robot is a4(3) and a4(1), X and Y
+
+if toggle2 == 1
+      updateData()
+else
 
 a4(3) = a4(3) + .1;    % arbitrary constant, adds to X
 a3Calc = inverseKin(a4(3), a4(1));
@@ -688,6 +693,8 @@ line3 = line([a3Calc(1) a4(3)],[a3Calc(2) a4(1)],'LineWidth',15,'Color',[0 0 1])
   if toggle == 1
       h = rectangle('Position',[a4(3) a4(1) pw ph],'Curvature',[1 1],'FaceColor',[0 0 0]);
   end
+end
+
 
 
 % --- Executes on button press in YPlus.
@@ -708,7 +715,12 @@ global a4;
 global pw;  %paintbrush width
 global ph;  %paintbrush height
 global toggle;
+global toggle2;
 % the end effector (paintbrush) of the robot is a4(3) and a4(1), X and Y
+
+if toggle2 == 1
+      updateData()
+else
 
 a4(1) = a4(1) + 0.1;    % arbitrary constant, adds to Y
 a3Calc = inverseKin(a4(3),a4(1));
@@ -728,6 +740,7 @@ line3 = line([a3Calc(1) a4(3)],[a3Calc(2) a4(1)],'LineWidth',15,'Color',[0 0 1])
  if toggle == 1
      h = rectangle('Position',[a4(3) a4(1) pw ph],'Curvature',[1 1],'FaceColor',[0 0 0]);
  end
+end
  
  % --- Executes on button press in XMinus.
 function XMinus_Callback(hObject, eventdata, handles)
@@ -747,7 +760,12 @@ global a4;
 global pw;  %paintbrush width
 global ph;  %paintbrush height
 global toggle;
+global toggle2;
 % the end effector (paintbrush) of the robot is a4(3) and a4(1), X and Y
+
+if toggle2 == 1
+      updateData()
+else
 
 a4(3) = a4(3) - 0.1;    % arbitrary constant, subtracts from X
 a3Calc = inverseKin(a4(3),a4(1));
@@ -764,6 +782,7 @@ line3 = line([a3Calc(1) a4(3)],[a3Calc(2) a4(1)],'LineWidth',15,'Color',[0 0 1])
  if toggle == 1
      h = rectangle('Position',[a4(3) a4(1) pw ph],'Curvature',[1 1],'FaceColor',[0 0 0]);
  end
+end
 
 
 % --- Executes on button press in YMinus.
@@ -784,7 +803,12 @@ global a4;
 global pw;  %paintbrush width
 global ph;  %paintbrush height
 global toggle;
+global toggle2;
 % the end effector (paintbrush) of the robot is a4(3) and a4(1), X and Y
+
+if toggle2 == 1
+      updateData()
+else
 
 a4(1) = a4(1) - 0.1;    % arbitrary constant, subtracts from Y
 a3Calc = inverseKin(a4(3),a4(1));
@@ -801,11 +825,12 @@ line2 = line([a2(3) a3Calc(1)],[a2(1) a3Calc(2)],'LineWidth',15,'Color',[0 1 0])
 line3 = line([a3Calc(1) a4(3)],[a3Calc(2) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
 %
 % Same paint functionality
- if toggle == 1
+ if toggle == 1 
      h = rectangle('Position',[a4(3) a4(1) pw ph],'Curvature',[1 1],'FaceColor',[0 0 0]);
  end
+end
  
-function receiveData(hObject, eventdata, handles)
+function updateData()
 global line1;
 global line2;
 global line3;
@@ -816,14 +841,16 @@ global a4;
 global pw;  %paintbrush width
 global ph;  %paintbrush height
 global toggle;
+global toggle2;
+global tcpipClient;
+'Updating client'
 
-tcpipClient = tcpip('localhost', 30000, 'NetworkRole', 'client');
-set(tcpipClient,'InputBufferSize',152);
-set(tcpipClient,'Timeout',10);
-'Hi I am the client'
-fopen(tcpipClient);
+tcpipClient.BytesAvailable
+
 data = fread(tcpipClient, 19, 'double');
-fclose(tcpipClient);
+
+'Got data vars'
+
 data
 
 a1(1) = data(1); a1(2) = data(2); a1(3) = data(3); a1(4) = data(4);
@@ -840,9 +867,50 @@ line1 = line([a1(3) a2(3)],[a1(1) a2(1)],'LineWidth',15,'Color',[1 0 0]);   %red
 line2 = line([a2(3) a3(3)],[a2(1) a3(1)],'LineWidth',15,'Color',[0 1 0]);   %green
 line3 = line([a3(3) a4(3)],[a3(1) a4(1)],'LineWidth',15,'Color',[0 0 1]);   %blue
 
-if toggle == 1
-    h = rectangle('Position',[a4(3) a4(1) pw ph],'Curvature',[1 1],'FaceColor',[0 0 0]);
+if toggle == 1 
+     h = rectangle('Position',[a4(3) a4(1) pw ph],'Curvature',[1 1],'FaceColor',[0 0 0]);
 end
+drawnow
+if toggle2 == 1
+    updateData();
+end
+     
+
+
+function receiveData(hObject, eventdata, handles)
+global tcpipClient;
+global toggle2;
+
+tcpipClient = tcpip('localhost', 30000, 'NetworkRole', 'client');
+set(tcpipClient,'InputBufferSize',152);
+set(tcpipClient,'Timeout',600);
+'Hi I am the client'
+toggle2 = true;
+fopen(tcpipClient);
+pause(1);
+'Connection opened'
+updateData();
+
+%fclose(tcpipClient);
+%data
+
+
+
+% --- Executes on button press in disconnect.
+function disconnect(hObject, eventdata, handles)
+% hObject    handle to disconnect (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global tcpipClient;
+global toggle2;
+
+'I am the client, disconnecting'
+toggle2 = false;
+fclose(tcpipClient);
+pause(1);
+drawnow
+'Disconnected'
+
 
 %NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNND
 %NNNNNNNNNNNNNNNN                                               NNNNNNNNNNNNNNNND
@@ -867,3 +935,5 @@ end
 %NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN                   NNNNNNNNNNNNNNNNNNNNNNNNNNNNNND
 %NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN                   NNNNNNNNNNNNNNNNNNNNNNNNNNNNNND
 %NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNND
+
+
